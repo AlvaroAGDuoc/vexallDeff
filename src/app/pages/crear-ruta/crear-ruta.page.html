@@ -7,31 +7,19 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content scroll-y="false">
+<ion-content >
 
+  <h1>Crear ruta</h1>
+  <form [formGroup]="formMapas" (ngSubmit)="buscarRuta()">
+    <input type="text" #rutaInicio id="rutaInicio" formControlName="rutaInicio">
+    
+    <button type="submit">Cargar</button>
+
+
+  <div class="mapa" #divMap></div>
+
+</form>
 </ion-content>
 
 
-<ion-footer collapse="fade">
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12">
-        <ion-item>
-          <ion-label class="blanco" position="floating">Ingresa tu ruta aquí</ion-label>
-          <ion-input  type="text" required></ion-input>
-        </ion-item>
-      </ion-col>
-
-      
-      <ion-col size="12">
-        <ion-item>
-          <ion-label class="blanco" position="floating">Precio</ion-label>
-          <ion-input  type="number" required></ion-input>
-        </ion-item>
-      </ion-col>
-
-    </ion-row>
-    <ion-button>Crear ruta</ion-button>
-  </ion-grid>
-</ion-footer>

@@ -6,7 +6,8 @@ import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 })
 export class GeolocationService {
 
-
+  // <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyKbof3tK4ltg-J-nwsh6-JsCU0X_gZak&libraries=places,directions"></script>
+  
   locations = []
 
   constructor(private geolocation: Geolocation) {  }
