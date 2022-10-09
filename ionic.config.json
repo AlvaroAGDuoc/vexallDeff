@@ -1,0 +1,7 @@
+{
+  "name": "vexall",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

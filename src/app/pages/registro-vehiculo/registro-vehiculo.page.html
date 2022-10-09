@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>registroVehiculo</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Registra tu auto</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <form [formGroup]="formGroup" (ngSubmit)="pasarDatos()">
+
+        <mat-form-field appearance="outline">
+          <mat-label class="blanco">Patente</mat-label>
+          <input type="text" matInput [(ngModel)]="patente" formControlName="patente" required>
+        </mat-form-field>
+        <p class="msjError"
+          *ngIf="(formGroup.get('patente').hasError('required') && formGroup.get('patente').touched )">
+          Ingrese datos</p>
+          <p class="msjError"
+          *ngIf="(formGroup.get('patente').hasError('minlength') && formGroup.get('patente').touched )">
+          La patente debe tener 6 digitos</p>
+
+        <mat-form-field appearance="outline">
+          <mat-label class="blanco">Modelo</mat-label>
+          <input type="text" matInput [(ngModel)]="modelo" formControlName="modelo" required>
+        </mat-form-field>
+        <p class="msjError" *ngIf="(formGroup.get('modelo').hasError('required') && formGroup.get('modelo').touched )">
+          Ingrese datos</p>
+          <p class="msjError"
+          *ngIf="(formGroup.get('modelo').hasError('minlength') && formGroup.get('modelo').touched )">
+          El modelo debe tener 2 caracteres como minimo</p>
+
+          <select (change)="marcaSeleccionada($event)">
+            <option value="default">----</option>
+            <option *ngFor="let m of arregloMarcas" [value]="m.id_marca">
+                {{m.nombre_marca}}
+            </option>
+          </select>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label class="blanco">Año</mat-label>
+          <input type="number" matInput [(ngModel)]="annio" formControlName="anio" required>
+        </mat-form-field>
+        <p class="msjError" *ngIf="(formGroup.get('anio').hasError('required') && formGroup.get('anio').touched )">
+          Ingrese datos</p>
+          <p class="msjError" *ngIf="formGroup.get('anio').touched && formGroup.get('anio').hasError('num')">
+          No se aceptan autos anteriores al año 2000</p>
+
+        <mat-form-field appearance="outline">
+          <mat-label class="blanco">Color</mat-label>
+          <input type="text" matInput [(ngModel)]="color" formControlName="color" required>
+        </mat-form-field>
+        <p class="msjError" *ngIf="(formGroup.get('color').hasError('required') && formGroup.get('color').touched )">
+          Ingrese datos</p>
+
+
+
+        <ion-button (click)="insertar()" expand="block">Registrar</ion-button>
+      </form>
+      <p class="p2">Se validaran los datos dentro de 3 dias habiles. Para más información <a class="quitarEstilo"
+          [routerLink]="['/preguntas-frecuentes']">Ingresa aquí.</a> </p>
+    </ion-card-content>
+  </ion-card>
+

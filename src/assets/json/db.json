@@ -1,0 +1,22 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "nombre": "v.rosendo",
+            "clave": "123",
+            "id_rol": 1
+        },
+        {
+            "id": 2,
+            "nombre": "j.baez",
+            "clave": "1234",
+            "id_rol": 2
+        },
+        {
+            "id": 3,
+            "nombre": "a.diaz",
+            "clave": "12345",
+            "id_rol": 2
+        }
+    ]
+}

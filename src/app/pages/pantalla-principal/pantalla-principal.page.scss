@@ -1,0 +1,32 @@
+ion-tab-bar {
+  --background: #121212;
+}
+
+
+ion-card,
+ion-card-content {
+  --background: #121212;
+}
+
+.texto {
+  color: #e8bffd;
+  font-size: 20px;
+  text-align: center;
+}
+
+.boton {
+  --color: #fffeff;
+  --background: #4f2e7f;
+  --background-hover-opacity: 20%;
+  margin-bottom: 15px;
+
+}
+
+.margen {
+  margin-bottom: 100px;
+}
+
+.spinner__loading {
+  margin-top: -40px;
+  margin-left: 140px;
+}

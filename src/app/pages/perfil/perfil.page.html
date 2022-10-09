@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo">
+  <ion-card>
+    <div (click)="tomarFoto()" *ngIf="foto === '' ">
+      <img src="assets/711769.png" alt="">
+    </div>
+
+    <div (click)="tomarFoto()" *ngIf="foto !== '' ">
+      <img [src]="foto" alt="">
+    </div>
+
+    <ion-card-header>
+
+      <h3>Mis datos personales</h3>
+      <hr class="hr">
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Nombre: {{this.usuario.nombre_usuario}}</p>
+      <ion-button class="boton"  size="default" expand="block">Modificar perfil</ion-button>
+      
+      <ion-button class="boton" size="default" expand="block" [routerLink]="['/lista-vehiculo']">Ver mis vehiculos</ion-button>
+      <ion-button class="boton" size="default" expand="block" [routerLink]="['/registro-vehiculo']">Agregar vehiculo</ion-button>
+      <ion-button class="botonRojo"  [routerLink]="['/']"  size="default" expand="block">Cerrar sesión</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

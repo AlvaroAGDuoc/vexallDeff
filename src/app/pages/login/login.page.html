@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo">
+  <img class="center" src="../../../assets/asd.png" />
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ingresa a tu cuenta</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label class="blanco" position="floating">Nombre usuario</ion-label>
+        <ion-input [(ngModel)]="nombre_usuario" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="blanco" position="floating">Clave</ion-label>
+        <ion-input [(ngModel)]="clave" type="password"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block"  (click)="validarUsuario(this.nombre_usuario, this.clave)">Conectarse</ion-button>
+
+      
+      <div style="text-align: center">
+        <hr class="hr">
+        <a [routerLink]="['/contrasena-olvidada']" class="quitarEstilo"
+          >¿Olvidaste tu clave?</a
+        >
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

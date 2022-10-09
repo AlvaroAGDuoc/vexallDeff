@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>verRecorrido</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scroll-y="false">
+
+</ion-content>
+
+
+<ion-footer collapse="fade">
+
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="6">
+
+
+        <h6>Descripción auto</h6>
+        <p><a>Patente:</a> </p>
+        <p><a>Modelo:</a> </p>
+        <p>Color:</p>
+        <p><a>Asientos disponibles:</a> </p>
+      </ion-col>
+    
+      <ion-col size="6">
+        <h6>Precio ruta</h6>
+        <p>{{this.viaje.preciov | currency: 'CLP'}}</p>    
+      </ion-col>
+
+      
+    </ion-row>
+    <ion-button expand="block">Tomar ruta</ion-button>
+  </ion-grid>
+</ion-footer>

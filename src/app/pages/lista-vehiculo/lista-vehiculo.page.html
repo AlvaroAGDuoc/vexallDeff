@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>listaVehiculo</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo">
+
+
+  <h4 class="textoRosado">Tus vehiculos</h4>
+
+  <!-- <div *ngIf="this.tieneVehiculos()"> -->
+
+  <ion-card *ngFor="let x of arregloVehiculo">
+
+    <ion-card-header>
+
+      <img
+        src="https://awscdn.audi.cl/media/Theme_Menu_Model_Dropdown_Item_Image_Component/root-cl-model-modelMenu-editableItems-7454-dropdown-333068-image/dh-487-a0e9a6/dd16a581/1657267468/menue.jpg">
+
+      <h3>Información del auto</h3>
+      <hr class="hr">
+    </ion-card-header>
+
+    <ion-card-content>
+      <p >Marca: {{x.nombre_marca}} </p>
+      <p>Modelo: {{x.modelo}} </p>
+      <p>Patente: {{x.patente}} </p>
+      <p>Color: {{x.color}} </p>
+      <p>Año: {{x.annio}}</p>
+      <p>Año: {{x.usuario_id}}</p>
+      <ion-button (click)="eliminar(x)" expand="block">Dar de baja</ion-button>
+    </ion-card-content>
+
+  </ion-card>
+<!-- </div> -->
+</ion-content>

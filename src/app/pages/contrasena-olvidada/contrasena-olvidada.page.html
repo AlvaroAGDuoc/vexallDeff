@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>contrasenaOlvidada</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content class="fondo">
+  <img class="center" src="../../../assets/asd.png" />
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Recupera tu clave</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Ingresa tu CORREO y te enviaremos un codigo a la dirección que ingresaste.</p>
+      <form [formGroup]="formGroup">
+        <mat-form-field appearance="outline">
+          <mat-label class="blanco">Email</mat-label>
+          <input type="email" matInput formControlName="email" required>
+        </mat-form-field>
+        <p class="msjError" *ngIf="(formGroup.get('email').hasError('required') && formGroup.get('email').touched )">
+          Ingrese datos</p>
+        <p class="msjError" *ngIf="(formGroup.get('email').hasError('email') && formGroup.get('email').touched )">
+          Ingrese un email valido</p>
+
+
+
+        <ion-button expand="block" (click)="cargando() ">Enviar codigo</ion-button>
+      </form>
+      <div *ngIf="loading">
+        <div class="progress__loading">
+          <div>
+            <mat-progress-bar [value]="value" mode="indeterminate">
+            </mat-progress-bar>
+          </div>
+        </div>
+
+      </div>
+
+
+    </ion-card-content>
+
+
+
+  </ion-card>
+</ion-content>

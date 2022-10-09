@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>viaje</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo">
+
+  <h5 class="titulo">Conductores cercanos a ti</h5>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title >{{element.nombre}}</ion-card-title>
+        <img src="">
+        <h3>Datos del conductor </h3>
+        <hr class="hr">
+      </ion-card-header>
+
+
+      <ion-card-content>
+        <p>Auto: </p>
+        <p>Patente del auto: </p>
+        <p>Color auto: </p>
+        <p>Precio: </p>
+        <p>Destino: </p>
+        <p>Asientos disponibles: </p>
+        <ion-button (click)="verRecorrido(i)" expand="block">Ver recorrido</ion-button>
+      </ion-card-content>
+    </ion-card>
+</ion-content>

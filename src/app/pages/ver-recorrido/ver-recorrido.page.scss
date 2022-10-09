@@ -1,0 +1,37 @@
+// .mapa {
+//     background-size: contain;
+//     background-repeat: no-repeat;
+//     width: 320px;
+//     height: 590px;
+// }
+
+ion-content {
+  --background: none;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+ion-button {
+  margin-top: 20px;
+  --color: #fffeff;
+  --background: #4f2e7f;
+  --background-hover-opacity: 20%;
+
+}
+a{
+  color: #e8bffd;
+}
+
+
+
+h6{
+  color: #e8bffd;
+  font-size: 18px;
+  text-align: center;
+}
+
+p{
+  text-align: center;
+  margin-bottom: -1px;
+}

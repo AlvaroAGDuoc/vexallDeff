@@ -1,0 +1,98 @@
+$blanco: #b2b2b2;
+
+
+ion-button {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  --color: #fffeff;
+  --background: #4f2e7f;
+
+  --background-hover-opacity: 20%;
+}
+
+ion-card {
+  --background: #121212;
+}
+
+ion-card-subtitle,
+ion-card-title {
+  color: #e8bffd;
+  font-size: 20px;
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+  color: $blanco;
+  font-size: 15px;
+  margin-top: -15px;
+  margin-bottom: -15px;
+}
+
+ion-item {
+  --background: ;
+}
+
+.select {
+  background: #121212;
+  color: $blanco;
+}
+
+mat-form-field {
+  margin-left: 20px;
+}
+
+.blanco {
+  color: $blanco;
+}
+
+.fondo {
+  --background: #4f2c80;
+}
+
+
+p {
+  color: $blanco;
+}
+
+.foto {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
+  clip-path: circle();
+  height: 150px;
+  width: 150px;
+  margin-bottom: 10px;
+}
+
+.center {
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: -60px;
+}
+
+.quitarEstilo {
+  text-decoration: none;
+  font-weight: bold;
+  color: #e8bffd;
+}
+
+.p2 {
+  font-size: 13px;
+}
+
+.msjError {
+  font-size: 15px;
+  color: #e8bffd;
+  text-align: center;
+  margin-top: -10px;
+}
+
+.hr {
+  border-bottom: 1px solid #ccc;
+  margin: 10px 0;
+  width: 100%;
+}
