@@ -47,8 +47,9 @@ export class CrearRutaPage implements OnInit {
     console.log('Datos del formulario: ', this.formMapas.value)
   }
 
-  private cargarAutoComplete() {
 
+
+  private cargarAutoComplete() {
     const autocomplete = new google.maps.places.Autocomplete(this.renderer.selectRootElement(this.rutaInicio.nativeElement), {
       componentRestrictions: {
         country: ["CL"]
@@ -87,6 +88,7 @@ export class CrearRutaPage implements OnInit {
     })
     markerPosition.setMap(this.mapa);
     this.marcadores.push(markerPosition);
+    console.log('mapa cargado')
   }
 
 }
