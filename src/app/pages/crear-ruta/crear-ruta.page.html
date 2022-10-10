@@ -10,15 +10,19 @@
 <ion-content >
 
   <h1>Crear ruta</h1>
+
+  <button>Calcular Ruta</button>
+  <!-- <h1>La distancia es: {{distancia}}</h1> -->
+
   <form [formGroup]="formMapas" (ngSubmit)="buscarRuta()">
     <input type="text" #rutaInicio id="rutaInicio" formControlName="rutaInicio">
+    <input type="text" #rutaFin id="rutaFin" formControlName="rutaFin">
     
     <button type="submit">Cargar</button>
 
-    
   </form>
   
-  <div class="mapa" #divMap></div>
+  <div id="mapa" #divMap></div>
 </ion-content>
 
 
