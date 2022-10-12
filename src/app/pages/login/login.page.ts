@@ -21,8 +21,6 @@ export class LoginPage implements OnInit {
 
   constructor(private router: Router, private servicioBD: BdservicioService, private storage: Storage,  private api: ApiService, private loading: LoadingPage) {
 
-
-
   }
 
   pagina = 'pantalla-principal'
@@ -35,8 +33,8 @@ export class LoginPage implements OnInit {
       } else {
         this.servicioBD.mandarDatosUsuario(nombre).then((usuario) => {      
           this.storage.set('usuario', usuario)
-          console.log("DATOS USUARIOS", usuario.rol_id, usuario.nombre_usuario)
-          this.router.navigate([this.loading.loadContent(this.pagina)]);
+          console.log("DATOS USUARIOS", usuario.id_usuario, usuario.nombre_usuario)
+          this.loading.loadContent(this.pagina);
         })
       }
     }

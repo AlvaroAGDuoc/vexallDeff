@@ -20,7 +20,7 @@ export class BdservicioService {
   tablaMarca: string = "CREATE TABLE IF NOT EXISTS MARCA(id_marca INTEGER PRIMARY KEY AUTOINCREMENT, nombre_marca VARCHAR(20));";
   tablaAuto: string = "CREATE TABLE IF NOT EXISTS AUTO(patente VARCHAR(6) PRIMARY KEY, color VARCHAR(20), modelo VARCHAR(30), annio INTEGER, usuario_id INTEGER, marca_id INTEGER, foreign key(usuario_id) references USUARIO(id_usuario), foreign key(marca_id) references MARCA(id_marca));";
 
-  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje DATE, hora_salida DATE, asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), status INTEGER, origen VARCHAR(80), destino VARCHAR(80), usuario_id_usuario INTEGER, foreign key(patente_auto) references AUTO(patente), foreign key(usuario_id_usuario) references USUARIO(id_usuario));";
+  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje VARCHAR(30), hora_salida VARCHAR(30), asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), status INTEGER, origen VARCHAR(80), destino VARCHAR(80), usuario_id_usuario INTEGER, foreign key(patente_auto) references AUTO(patente), foreign key(usuario_id_usuario) references USUARIO(id_usuario));";
  
   
   //variable para la sentencia de registros por defecto en la tabla
@@ -106,7 +106,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'basededato5.db',
+        name: 'basededato9.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -126,15 +126,10 @@ export class BdservicioService {
 
       //ejecuto mis tablas
       await this.database.executeSql(this.tablaRol, []);
-      console.log('1')
       await this.database.executeSql(this.tablaUsuario, []);
-      console.log('2')
       await this.database.executeSql(this.tablaMarca, []);
-      console.log('3')
       await this.database.executeSql(this.tablaAuto, []);
-      console.log('4')
       await this.database.executeSql(this.tablaViaje, []);
-      console.log('5')
 
       //ejecuto mis registros
       await this.database.executeSql(this.registroRol, []);
@@ -302,7 +297,7 @@ export class BdservicioService {
   }
 
   buscarRutas() {
-    return this.database.executeSql('SELECT * FROM USUARIO U INNER JOIN AUTO A ON (U.ID_USUARIO = A.USUARIO_ID) INNER JOIN VIAJE V ON (A.PATENTE = V.PATENTE_AUTO)', []).then(res => {
+    return this.database.executeSql('SELECT * FROM VIAJE V JOIN USUARIO U ON (V.USUARIO_ID_USUARIO = U.ID_USUARIO) JOIN AUTO A ON (A.USUARIO_ID = U.ID_USUARIO)', []).then(res => {
 
       let items: Rutas[] = [];
 
@@ -323,9 +318,7 @@ export class BdservicioService {
             asientos_dispo: res.rows.item(i).asientos_dispo,
             monto: res.rows.item(i).monto,
             origen: res.rows.item(i).origen,
-            destino: res.rows.item(i).destino,
-
-            //DETALLE VIAJE
+            destino: res.rows.item(i).destino,          
             status: res.rows.item(i).status
           })
         }

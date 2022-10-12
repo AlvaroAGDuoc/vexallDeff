@@ -119,7 +119,7 @@ export class CrearRutaPage implements OnInit {
         let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
         let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
         let status = 1;
-        this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, precio, this.patenteSeleccionada, status, ruta1, ruta2, this.usuario.id_usuario)
+        this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, precio, this.patenteSeleccionada, this.usuario.id_usuario, status, ruta1, ruta2 )
 
         console.log('HORA: ', hora_actual , ' FECHA: ', fecha_viaje)
 
