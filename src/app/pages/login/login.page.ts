@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage-angular';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver'
 import { ApiService } from 'src/app/services/api.service';
 import { LoadingPage } from '../loading/loading.page';
-import { GeolocationService } from 'src/app/services/geolocation.service';
+
 
 @Component({
   selector: 'app-login',
@@ -19,16 +19,15 @@ export class LoginPage implements OnInit {
 
   locations = [];
 
-  constructor(private router: Router, private servicioBD: BdservicioService, private storage: Storage,  private api: ApiService, private loading: LoadingPage, private geolocation: GeolocationService) {
+  constructor(private router: Router, private servicioBD: BdservicioService, private storage: Storage,  private api: ApiService, private loading: LoadingPage) {
 
-    this.geolocation.getGeolocation()
 
 
   }
 
   pagina = 'pantalla-principal'
 
-  validarUsuario(nombre, clave) {
+  validarUsuario(nombre: string, clave: string) {
     this.servicioBD.validarUsuario(nombre, clave).then((res) => {
       if (res) {
         this.servicioBD.presentToast('NO')
@@ -49,7 +48,6 @@ export class LoginPage implements OnInit {
   async ngOnInit() {
     await this.storage.defineDriver(CordovaSQLiteDriver);
     await this.storage.create();
-
     
     this.api.getUsers().subscribe((res) => {
       this.usuarios = res;

@@ -26,7 +26,7 @@ export class ListaVehiculoPage implements OnInit {
 
   constructor(private servicioBD: BdservicioService, private storage: Storage) {
 
-
+    
   }
 
 

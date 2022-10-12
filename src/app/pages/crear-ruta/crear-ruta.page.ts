@@ -1,8 +1,11 @@
 ///<reference path="../../../../node_modules/@types/googlemaps/index.d.ts"/>
 
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-// import { GeolocationService } from 'src/app/services/geolocation.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+import { BdservicioService } from 'src/app/services/bdservicio.service';
+import { Storage } from '@ionic/storage-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crear-ruta',
@@ -13,49 +16,126 @@ export class CrearRutaPage implements OnInit {
 
   @ViewChild('divMap') divMap!: ElementRef;
   @ViewChild('rutaInicio') rutaInicio!: ElementRef;
+  @ViewChild('rutaFin') rutaFin!: ElementRef;
 
   mapa!: google.maps.Map;
-  marcadores: google.maps.Marker[];
-  
-  formMapas!: FormGroup;
 
-  constructor(private renderer: Renderer2) {
-    this.marcadores = [];
+  distancia;
+
+
+  formMapas!: FormGroup;
+  
+  usuario: any = {};
+
+  arregloVehiculo: any = [
+    {
+      patente: '',
+      color: '',
+      modelo: '',
+      annio: '',
+      marca_id: '',
+      usuario_id: '',
+      nombre_marca: ''
+    }
+  ]
+
+  patenteSeleccionada = '';
+
+
+  constructor(private geolocation: Geolocation, private bd: BdservicioService,private storage: Storage, private router: Router) {
+
 
     this.formMapas = new FormGroup({
-      rutaInicio: new FormControl('')
+      vehiculos: new FormControl('', []),
+      ruta1: new FormControl('', [Validators.required]),
+      ruta2: new FormControl('', [Validators.required]),
+      precio: new FormControl(''),
+      asientos: new FormControl(''),
     })
-    
 
+  }
+
+  vehiculoSeleccionado(e) {
+    this.patenteSeleccionada = e.target.value
   }
 
   ngOnInit() {
+  this.storage.get('usuario').then((val) => {
+      this.usuario = val
+      this.bd.dbState().subscribe(res => {
+        if (res) {
+          this.bd.fetchVehiculos().subscribe(item => {
+            this.arregloVehiculo = item.filter(v => v.usuario_id == this.usuario.id_usuario);
+          })
+        }
+      })
+    })
   }
 
   ngAfterViewInit(): void {
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async(position) => {
-        await this.cargarMapa(position);
-        this.cargarAutoComplete();
+    this.geolocation.getCurrentPosition().then((resp) => {
+      console.log('resp ', resp)
+
+      this.cargarMapa(resp)
+      this.cargarAutoComplete()
+
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+
+
+  }
+
+  calcularRuta() {
+
+      const directionService = new google.maps.DirectionsService();
+      const directionRender = new google.maps.DirectionsRenderer();
+      let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
+      let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
+
+      directionRender.setMap(this.mapa);
+
+      directionService.route({
+        origin: ruta1,
+        destination: ruta2,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, resultado => {
+        console.log(resultado);
+        directionRender.setDirections(resultado)
+
+        this.distancia = resultado.routes[0].legs[0].distance.text;
+
+       (document.getElementById('distancia') as HTMLElement).innerText = 'la distancia de tu recorrido es de: ' + this.distancia
       })
-    } else {
-      console.log('error')
+    } 
+
+    crearRuta() {
+      if(this.formMapas.valid) {
+        let fecha = new Date()
+        let hora_actual = fecha.toLocaleTimeString()
+        let fecha_viaje = fecha.toLocaleDateString()
+        let asientos = (document.getElementById('asientos') as HTMLInputElement).value;
+        let precio = (document.getElementById('precio') as HTMLInputElement).value;
+        let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
+        let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
+        let status = 1;
+        this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, precio, this.patenteSeleccionada, status, ruta1, ruta2, this.usuario.id_usuario)
+
+        console.log('HORA: ', hora_actual , ' FECHA: ', fecha_viaje)
+
+        this.router.navigate(['/pantalla-principal'])
+      }else {
+        this.bd.presentToast2("Todos los campos deben ser llenados")
+      }
     }
-  }
-
-  buscarRuta() {
-    console.log('Datos del formulario: ', this.formMapas.value)
-  }
-
-
-
+  
   private cargarAutoComplete() {
-    const autocomplete = new google.maps.places.Autocomplete(this.renderer.selectRootElement(this.rutaInicio.nativeElement), {
+    const autocomplete = new google.maps.places.Autocomplete((this.rutaInicio.nativeElement), {
       componentRestrictions: {
         country: ["CL"]
       },
       fields: ["address_components", "geometry"],
-      types: ["address"],
+      types: ["establishment"]
     })
 
     google.maps.event.addListener(autocomplete, 'place_changed', () => {
@@ -69,9 +149,27 @@ export class CrearRutaPage implements OnInit {
       marker.setMap(this.mapa);
     })
 
+    const autocomplete2 = new google.maps.places.Autocomplete((this.rutaFin.nativeElement), {
+      componentRestrictions: {
+        country: ["CL"]
+      },
+      fields: ["address_components", "geometry"],
+      types: ["address"],
+    })
+
+    google.maps.event.addListener(autocomplete2, 'place_changed', () => {
+      const place2: any = autocomplete2.getPlace();
+      console.log('El place completo es: ', place2)
+
+      this.mapa.setCenter(place2.geometry.location);
+      const marker = new google.maps.Marker({
+        position: place2.geometry.location
+      });
+      marker.setMap(this.mapa);
+    })
+
+
   }
-
-
 
   cargarMapa(position: any): any {
     const opciones = {
@@ -80,15 +178,7 @@ export class CrearRutaPage implements OnInit {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
 
-
-    this.mapa = new google.maps.Map(this.renderer.selectRootElement(this.divMap.nativeElement), opciones)
-    const markerPosition = new google.maps.Marker({
-      position: this.mapa.getCenter(),
-      title: "vexall"
-    })
-    markerPosition.setMap(this.mapa);
-    this.marcadores.push(markerPosition);
-    console.log('mapa cargado')
+    this.mapa = new google.maps.Map((this.divMap.nativeElement), opciones)
   }
 
 }

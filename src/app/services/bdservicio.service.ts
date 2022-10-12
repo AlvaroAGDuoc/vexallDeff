@@ -19,11 +19,10 @@ export class BdservicioService {
   tablaUsuario: string = "CREATE TABLE IF NOT EXISTS USUARIO(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario VARCHAR(30), clave VARCHAR(30), rol_id INTEGER,  foreign key(rol_id) references ROL(id_rol));";
   tablaMarca: string = "CREATE TABLE IF NOT EXISTS MARCA(id_marca INTEGER PRIMARY KEY AUTOINCREMENT, nombre_marca VARCHAR(20));";
   tablaAuto: string = "CREATE TABLE IF NOT EXISTS AUTO(patente VARCHAR(6) PRIMARY KEY, color VARCHAR(20), modelo VARCHAR(30), annio INTEGER, usuario_id INTEGER, marca_id INTEGER, foreign key(usuario_id) references USUARIO(id_usuario), foreign key(marca_id) references MARCA(id_marca));";
-  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje VARCHAR(30), hora_salida VARCHAR(30), asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), foreign key(patente_auto) references AUTO(patente));";
-  tablaDetalleViaje: string = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(id_detalle INTEGER PRIMARY KEY AUTOINCREMENT, status BOOLEAN, usuario_id_usuario INTEGER, viaje_id INTEGER, foreign key(usuario_id_usuario) references USUARIO(id_usuario), foreign key(viaje_id) references VIAJE(id_viaje));";
-  tablaComuna: string = "CREATE TABLE IF NOT EXISTS COMUNA(id_comuna INTEGER PRIMARY KEY AUTOINCREMENT, nombre_comuna VARCHAR(25));";
-  tablaViajeComuna: string = "CREATE TABLE IF NOT EXISTS VIAJE_COMUNA(id INTEGER PRIMARY KEY AUTOINCREMENT, comuna_id INTEGER, viaje_id_viaje INTEGER, foreign key(viaje_id_viaje) references VIAJE(id_viaje), foreign key(comuna_id) references COMUNA(id_comuna));";
 
+  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje DATE, hora_salida DATE, asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), status INTEGER, origen VARCHAR(80), destino VARCHAR(80), usuario_id_usuario INTEGER, foreign key(patente_auto) references AUTO(patente), foreign key(usuario_id_usuario) references USUARIO(id_usuario));";
+ 
+  
   //variable para la sentencia de registros por defecto en la tabla
   registroRol: string = "INSERT or IGNORE INTO ROL(id_rol,nombre_rol) VALUES (1,'Conductor');";
   registroRol2: string = "INSERT or IGNORE INTO ROL(id_rol,nombre_rol) VALUES (2,'Pasajero');";
@@ -38,14 +37,6 @@ export class BdservicioService {
   registroMarca7: string = "INSERT or IGNORE INTO MARCA(id_marca,nombre_marca) VALUES (7,'SUZUKI');";
   registroMarca8: string = "INSERT or IGNORE INTO MARCA(id_marca,nombre_marca) VALUES (8,'HONDA');";
 
-  registroComuna: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (1,'RECOLETA');";
-  registroComuna1: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (2,'HUECHURABA');";
-  registroComuna2: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (3,'CONCHALI');";
-  registroComuna3: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (4,'SANTIAGO');";
-  registroComuna4: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (5,'LA CISTERNA');";
-  registroComuna5: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (6,'PUDAHUEL');";
-  registroComuna6: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (7,'LAS CONDES');";
-  registroComuna7: string = "INSERT or IGNORE INTO COMUNA(id_comuna,nombre_comuna) VALUES (8,'QUILICURA');";
 
 
   listaVehiculos = new BehaviorSubject([]);
@@ -69,6 +60,16 @@ export class BdservicioService {
       message: msj,
       duration: 3000,
       icon: 'globe'
+    });
+    await toast.present();
+
+  }
+  async presentToast2(msj: string) {
+    const toast = await this.toastController.create({
+      message: msj,
+      duration: 3000,
+      icon: 'globe',
+      color: 'danger'
     });
     await toast.present();
 
@@ -105,7 +106,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'basededato4.db',
+        name: 'basededato5.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -125,13 +126,16 @@ export class BdservicioService {
 
       //ejecuto mis tablas
       await this.database.executeSql(this.tablaRol, []);
+      console.log('1')
       await this.database.executeSql(this.tablaUsuario, []);
+      console.log('2')
       await this.database.executeSql(this.tablaMarca, []);
+      console.log('3')
       await this.database.executeSql(this.tablaAuto, []);
+      console.log('4')
       await this.database.executeSql(this.tablaViaje, []);
-      await this.database.executeSql(this.tablaDetalleViaje, []);
-      await this.database.executeSql(this.tablaComuna, []);
-      await this.database.executeSql(this.tablaViajeComuna, []);
+      console.log('5')
+
       //ejecuto mis registros
       await this.database.executeSql(this.registroRol, []);
       await this.database.executeSql(this.registroRol2, []);
@@ -143,19 +147,13 @@ export class BdservicioService {
       await this.database.executeSql(this.registroMarca6, []);
       await this.database.executeSql(this.registroMarca7, []);
       await this.database.executeSql(this.registroMarca8, []);
-      await this.database.executeSql(this.registroComuna, []);
-      await this.database.executeSql(this.registroComuna1, []);
-      await this.database.executeSql(this.registroComuna2, []);
-      await this.database.executeSql(this.registroComuna3, []);
-      await this.database.executeSql(this.registroComuna4, []);
-      await this.database.executeSql(this.registroComuna5, []);
-      await this.database.executeSql(this.registroComuna6, []);
-      await this.database.executeSql(this.registroComuna7, []);
+
 
       //cargar registros en observable
       this.buscarVehiculos();
       this.buscarMarcas();
       this.buscarUsuarios();
+      this.buscarRutas();
 
       //actualizar el status de la BD
       this.isDBReady.next(true);
@@ -296,18 +294,15 @@ export class BdservicioService {
   }
 
 
-  agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, id_comuna, id_viaje) {
-    let data = [fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto];
-    let data2 = [id_comuna, id_viaje]
-    return this.database.executeSql('INSERT INTO VIAJE(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto) VALUES (?,?,?,?,?)', data),
-      this.database.executeSql('INSERT INTO VIAJE_COMUNA(viaje_id_viaje, comuna_id) VALUES (?,?)', data2).then(res => {
-        this.buscarRutas();
+  agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto,id_usuario, status, origen, destino ) {
+    let data = [fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, status, origen, destino, id_usuario  ];
+    return this.database.executeSql('INSERT INTO VIAJE(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, status, origen, destino, usuario_id_usuario) VALUES (?,?,?,?,?,?,?,?,?)', data).then(res => {
+      this.buscarRutas();
       })
   }
 
-
   buscarRutas() {
-    return this.database.executeSql('SELECT * FROM USUARIO U INNER JOIN AUTO A ON (U.ID_USUARIO = A.USUARIO_ID_USUARIO) INNER JOIN VIAJE V ON (A.PATENTE = V.AUTO_PATENTE) INNER JOIN DETALLE_VIAJE DV ON (V.ID_VIAJE = DV.VIAJE_ID_VIAJE)', []).then(res => {
+    return this.database.executeSql('SELECT * FROM USUARIO U INNER JOIN AUTO A ON (U.ID_USUARIO = A.USUARIO_ID) INNER JOIN VIAJE V ON (A.PATENTE = V.PATENTE_AUTO)', []).then(res => {
 
       let items: Rutas[] = [];
 
@@ -316,27 +311,26 @@ export class BdservicioService {
           items.push({
             //USUARIO
             usuario_id: res.rows.item(i).id_usuario,
-            patente: res.rows.item(i).patente,
             viaje_id: res.rows.item(i).id_viaje,
-            detalle_id: res.rows.item(i).id_detalle,
-            nombre: res.rows.item(i).nombre,
-            apellidos: res.rows.item(i).apellidos,
-
+            nombre_usuario: res.rows.item(i).nombre_usuario,
             //AUTO
             color: res.rows.item(i).color,
             modelo: res.rows.item(i).modelo,
-
+            patente: res.rows.item(i).patente,
             //VIAJE
             fecha_viaje: res.rows.item(i).fecha_viaje,
             hora_salida: res.rows.item(i).hora_salida,
             asientos_dispo: res.rows.item(i).asientos_dispo,
             monto: res.rows.item(i).monto,
+            origen: res.rows.item(i).origen,
+            destino: res.rows.item(i).destino,
 
             //DETALLE VIAJE
             status: res.rows.item(i).status
           })
         }
       }
+      this.listaRutas.next(items);
     })
   }
 

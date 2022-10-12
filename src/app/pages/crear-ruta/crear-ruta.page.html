@@ -10,10 +10,31 @@
 <ion-content >
 
   <h1>Crear ruta</h1>
-  <form [formGroup]="formMapas" (ngSubmit)="buscarRuta()">
-    <input type="text" #rutaInicio id="rutaInicio" formControlName="rutaInicio">
-    
-    <button type="submit">Cargar</button>
+  <form [formGroup]="formMapas"  (ngSubmit)="crearRuta()">
+    <select  formControlName="vehiculos" (change)="vehiculoSeleccionado($event)">
+      <option value="1">Selecciona un vehiculo</option>
+      <option *ngFor="let v of arregloVehiculo" [value]="v.patente">
+         {{v.modelo}}, Patente: {{v.patente}}
+      </option>
+    </select>
+
+    <h2>{{this.patenteSeleccionada}}</h2>
+   
+      <input type="text" #rutaInicio id="rutaInicio" formControlName="ruta1">
+
+      <input type="text" #rutaFin id="rutaFin" formControlName="ruta2">
+
+      <h2 id="distancia"></h2>
+
+      <button (click)="calcularRuta()">Calcular ruta</button>
+
+   
+
+      <input type="number" id="precio" formControlName="precio">
+
+      <input type="number" id="asientos" formControlName="asientos">
+
+    <button type="submit">Crear ruta</button>
 
     
   </form>

@@ -15,6 +15,7 @@ export class PantallaPrincipalPage implements OnInit {
   constructor(private storage: Storage) {
     this.storage.get('usuario').then((val) => {
       this.usuario = val
+      console.log('USUARIO PANTALLA', JSON.stringify(this.usuario))
     })
   }
 

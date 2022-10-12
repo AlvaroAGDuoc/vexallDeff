@@ -1,21 +1,19 @@
 export class Rutas{
 
   usuario_id: number;
+  nombre_usuario: string;
   patente: string;
   viaje_id: number;
-  detalle_id: number;
-
-  nombre: string;
-  apellidos: string;
 
   color: string;
   modelo: string;
 
-  fecha_viaje: string;
-  hora_salida: string;
+  fecha_viaje: Date;
+  hora_salida: Date;
   asientos_dispo: number;
   monto: number;
-
-  status: boolean;
+  origen: string;
+  destino: string;
+  status: number;
 
 }

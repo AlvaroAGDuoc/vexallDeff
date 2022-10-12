@@ -11,7 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/contrasena-olvidada/contrasena-olvidada.module').then( m => m.ContrasenaOlvidadaPageModule)
   },
   {
-    path: '',
+    path: 'crear-ruta',
     loadChildren: () => import('./pages/crear-ruta/crear-ruta.module').then( m => m.CrearRutaPageModule)
   },
   {
@@ -43,7 +43,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/viaje/viaje.module').then( m => m.ViajePageModule)
   },
   {
-    path: 'sl',
+    path: '',
     loadChildren: () => import('./pages/splash-screen/splash-screen.module').then( m => m.SplashScreenPageModule)
   },
   {
